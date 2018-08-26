@@ -1,16 +1,26 @@
 {
   "name": "predictive-search",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-scripts": "1.1.4"
-  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoboCaesar/predictive-search.git"
+  },
+  "author": "Thomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoboCaesar/predictive-search/issues"
+  },
+  "homepage": "https://github.com/RoboCaesar/predictive-search#readme",
+  "dependencies": {
+    "@zeit/next-css": "^0.2.0",
+    "next": "^6.1.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
   }
 }

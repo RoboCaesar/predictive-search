@@ -1,2 +1,0 @@
-The purpose of the web app is to have an interface where a user can start typing in the name of a city and results will dynamically pop up before the user has finished typing.
-This complements my ‘react-city-profile’ project.
