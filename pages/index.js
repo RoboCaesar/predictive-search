@@ -15,6 +15,7 @@ class SearchApp extends React.Component {
                 <h1>Find a City or Town</h1>
                 <p className="extra-info">Try typing below and the server will dynamically try to find matches.</p>
                 <SearchBox />
+                <p>Something below the search box.</p>
             </Layout>
         );
     }
