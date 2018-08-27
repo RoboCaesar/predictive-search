@@ -1,6 +1,15 @@
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
+function resultsItems(props) {
+    return props.map((entry) =>
+        <div className="search-result" key={entry.name}>
+            <p>{entry.name}, {entry.country}</p>
+            <p className="location-info">{entry.coords.lat}°, {entry.coords.long}°</p>
+        </div>
+    );
+}
+
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
 
 class SearchBox extends React.Component {
@@ -12,7 +21,25 @@ class SearchBox extends React.Component {
         this.state = {
             resultsVisible: false,
             query: '',
-            loading: false
+            loading: false,
+            searchResults: [
+                {
+                    name: "Madison",
+                    country: "USA",
+                    coords: {
+                        lat: 43.17,
+                        long: -73.80
+                    }
+                },
+                {
+                    name: "Seattle",
+                    country: "USA",
+                    coords: {
+                        lat: 47.17,
+                        long: -50.80
+                    }
+                }
+            ]
         }
     }
 
@@ -49,22 +76,28 @@ class SearchBox extends React.Component {
         let results;
 
         if (this.state.loading === false) {
-            results = 
-                <div>
-                    <div className="search-result">
-                        <p>Result One, USA</p>
-                        <p className="location-info">43.15°, -73.73°</p>
-                    </div>
-                    <div className="search-result">
-                        <p>Result Two, France</p>
-                        <p className="location-info">43.15°, -73.73°</p>
-                    </div>
-                    <div className="search-result">
-                        <p>Result Three, Canada</p>
-                        <p className="location-info">43.15°, -73.73°</p>
-                    </div>
-                </div>
-            ;
+            if (this.state.searchResults) {
+                results = 
+                    // <div>
+                    //     <div className="search-result">
+                    //         <p>Result One, USA</p>
+                    //         <p className="location-info">43.15°, -73.73°</p>
+                    //     </div>
+                    //     <div className="search-result">
+                    //         <p>Result Two, France</p>
+                    //         <p className="location-info">43.15°, -73.73°</p>
+                    //     </div>
+                    //     <div className="search-result">
+                    //         <p>Result Three, Canada</p>
+                    //         <p className="location-info">43.15°, -73.73°</p>
+                    //     </div>
+                    // </div>
+                    resultsItems(this.state.searchResults);
+                ;
+            } else {
+                results = <p>No results found...yet!</p>
+            }
+
         } else {
             results = <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
         }
