@@ -6,12 +6,13 @@ import PropTypes from 'prop-types';
 class SearchBox extends React.Component {
     constructor(props) {
         super(props);
+        this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleEntry = this.handleEntry.bind(this);
         this.handleLeave = this.handleLeave.bind(this);
         this.state = {
-            resultsVisible: false
+            resultsVisible: false,
+            query: ''
         }
-        this.setWrapperRef = this.setWrapperRef.bind(this);
     }
 
     setWrapperRef(node) {
@@ -19,14 +20,15 @@ class SearchBox extends React.Component {
     }
 
     handleEntry(e) {
-        this.setState((prevState) => {
-            return {resultsVisible: true}
-        });
+        this.setState({
+            resultsVisible: (e.target.value.length > 0), //if there's no text, don't show the results window.
+            query: e.target.value
+        });   
         e.preventDefault();
     }
 
     handleLeave(e) {
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
             this.setState((prevState) => {
                 return {resultsVisible: false}
             });
@@ -43,11 +45,11 @@ class SearchBox extends React.Component {
 
     render() {
         return (
-            <div ref={this.setWrapperRef}>
+            <div>
                 <form>
                     <input onInput={this.handleEntry} type="text" />
                 </form>
-                <div className="results-box" style={{display: this.state.resultsVisible ? 'block' : 'none'}}>
+                <div ref={this.setWrapperRef} className="results-box" style={{display: this.state.resultsVisible ? 'block' : 'none'}}>
                     <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                     <Link href="https://www.google.com">
                         <a>This is a link. Where does it go?</a>
@@ -58,8 +60,8 @@ class SearchBox extends React.Component {
     }
 }
 
-SearchBox.propTypes = {
-    children: PropTypes.element.isRequired,
-};
+// SearchBox.propTypes = {
+//     children: PropTypes.element.isRequired,
+// };
 
 export default SearchBox;
