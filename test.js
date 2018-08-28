@@ -23,7 +23,11 @@ async function main() {
 
     //A regular expression - It means that it will look for words that contain the first two
     //letters shown, but if those letters are in the middle of a word, it won't count.
-    let testRegEx = /\bma/i;
+
+    let searchQuery = '^' + 'mad';
+    let testRegEx = new RegExp(searchQuery, 'i');//   /^mad/i;
+    // ^ means it's at the beginning of a string, and i means case insensitive.
+    console.log("Using the regular expression: " + testRegEx);
     let matchedResults = cityData.filter(({name}) => name.match(testRegEx));
 
     console.log(matchedResults);
