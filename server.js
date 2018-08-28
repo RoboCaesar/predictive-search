@@ -8,6 +8,8 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
+const cityData;
+
 const loadCityData = () => {
     console.log("Trying to load city data...");
     return new Promise ((resolve, reject) => {
@@ -30,7 +32,7 @@ app.prepare()
 //     });
 // })
 .then(async () => {
-  let cityData = await loadCityData();
+  cityData = await loadCityData();
   console.log("Loaded city data with length " + cityData.length);
   const server = express()
 
