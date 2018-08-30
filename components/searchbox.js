@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+const axios = require('axios');
+
 
 function resultsItems(props) {
     return props.map((entry) =>
         <div className="search-result" key={entry.name}>
             <p>{entry.name}, {entry.country}</p>
-            <p className="location-info">{entry.coords.lat}°, {entry.coords.long}°</p>
+            <p className="location-info">{entry.coord.lat}°, {entry.coord.lon}°</p>
         </div>
     );
 }
@@ -18,29 +20,31 @@ class SearchBox extends React.Component {
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleEntry = this.handleEntry.bind(this);
         this.handleLeave = this.handleLeave.bind(this);
+        this.loadResults = this.loadResults.bind(this);
         this.state = {
             resultsVisible: false,
             query: '',
             loading: false,
-            searchResults: [
-                {
-                    name: "Madison",
-                    country: "USA",
-                    coords: {
-                        lat: 43.17,
-                        long: -73.80
-                    }
-                },
-                {
-                    name: "Seattle",
-                    country: "USA",
-                    coords: {
-                        lat: 47.17,
-                        long: -50.80
-                    }
-                }
-            ]
+            searchResults: []
         }
+    }
+
+    loadResults(searchQuery) {
+        axios.get('/search/' + searchQuery)
+        .then((response) => {
+          console.log(response.data);
+          this.setState(() => {
+            return {
+                searchResults: response.data,
+                loading: false
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .then(() => {
+        });
     }
 
     setWrapperRef(node) {
@@ -48,10 +52,26 @@ class SearchBox extends React.Component {
     }
 
     handleEntry(e) {
-        this.setState({
-            resultsVisible: (e.target.value.length > 0), //if there's no text, don't show the results window.
-            query: e.target.value
-        });   
+        if (e.target.value.length > 2) {
+            this.setState({
+                resultsVisible: true, //if there's no text, don't show the results window.
+                query: e.target.value,
+                loading: true
+            }, () => {
+                this.loadResults(this.state.query);
+            });
+        } else if (e.target.value.length === 0) {
+            this.setState({
+                resultsVisible: false,
+                query: e.target.value,
+                searchResults: [],
+                loading: false
+            });               
+        } else {
+            this.setState({
+                query: e.target.value
+            });             
+        }
         e.preventDefault();
     }
 
@@ -76,7 +96,7 @@ class SearchBox extends React.Component {
         let results;
 
         if (this.state.loading === false) {
-            if (this.state.searchResults) {
+            if (this.state.searchResults && this.state.searchResults.length > 0) {
                 results = 
                     // <div>
                     //     <div className="search-result">
@@ -95,7 +115,7 @@ class SearchBox extends React.Component {
                     resultsItems(this.state.searchResults);
                 ;
             } else {
-                results = <p>No results found...yet!</p>
+                results = <p>No results found!</p>
             }
 
         } else {

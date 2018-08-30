@@ -8,7 +8,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const cityData;
+let cityData;
 
 const loadCityData = () => {
     console.log("Trying to load city data...");
@@ -35,6 +35,16 @@ app.prepare()
   cityData = await loadCityData();
   console.log("Loaded city data with length " + cityData.length);
   const server = express()
+
+  server.get('/search/:thestring', async (req, res) => {
+      let searchQuery = '^' + req.params.thestring;
+      let regExFilter = new RegExp(searchQuery, 'i');
+      console.log("A search is being attempted for the query " + req.params.thestring + "!");
+
+      let results = await cityData.filter(({name}) => name.match(regExFilter)).slice(0,5);
+      //console.log(results);
+      return res.send(results);
+  })
 
   server.get('*', (req, res) => {
     return handle(req, res)
